@@ -1,1 +1,302 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Poly Voice AI</title>
+
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;background:#080b18;color:#f4f6ff;
+ font-family:Arial,sans-serif;
+}
+header{
+ padding:22px;text-align:center;
+ background:#11172a;border-bottom:1px solid #29324b;
+}
+.logo{font-size:35px}
+header h1{margin:8px;color:#7890ff}
+header p{color:#aab4d2}
+.container{max-width:850px;margin:auto;padding:20px}
+.card{
+ background:#131a2e;border:1px solid #29324b;
+ border-radius:20px;padding:20px;margin-bottom:20px;
+}
+.languages{
+ display:grid;grid-template-columns:1fr 45px 1fr;
+ gap:10px;align-items:center;
+}
+select,textarea{
+ width:100%;padding:14px;border-radius:12px;
+ background:#0b1020;color:white;
+ border:1px solid #344166;font-size:15px;
+}
+label{display:block;color:#aab4d2;margin-bottom:8px}
+.swap{
+ background:#263454;color:#42e8d5;
+ border:0;border-radius:12px;padding:12px;font-size:22px;
+}
+textarea{min-height:150px;resize:vertical;line-height:1.6}
+button{cursor:pointer}
+.mainbtn{
+ width:100%;padding:16px;margin-top:15px;
+ border:0;border-radius:12px;
+ background:linear-gradient(90deg,#637dff,#9564ff);
+ color:white;font-weight:bold;font-size:16px;
+}
+.tools{display:flex;gap:10px;flex-wrap:wrap}
+.tools button{
+ flex:1;padding:12px;border-radius:10px;
+ border:1px solid #344166;background:#1b2940;color:#dce4ff;
+}
+.status{text-align:center;color:#42e8d5;font-size:13px}
+.features{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.feature{
+ background:#131a2e;border:1px solid #29324b;
+ border-radius:14px;padding:15px;text-align:center;
+}
+.feature h3{font-size:14px}
+.feature p{font-size:12px;color:#aab4d2;line-height:1.5}
+footer{text-align:center;padding:25px;color:#7783a4}
+@media(max-width:600px){
+ .container{padding:12px}
+ .card{padding:14px}
+ .features{grid-template-columns:1fr}
+ .languages{gap:6px}
+ select{font-size:12px;padding:10px 5px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+ <div class="logo">🌐</div>
+ <h1>Poly Voice AI</h1>
+ <p>Le monde parle. Vous comprenez.</p>
+</header>
+
+<div class="container">
+
+ <div class="card">
+  <div class="languages">
+   <div>
+    <label>Langue source</label>
+    <select id="from">
+     <option value="ht">🇭🇹 Kreyòl</option>
+     <option value="fr">🇫🇷 Français</option>
+     <option value="en">🇺🇸 English</option>
+     <option value="es">🇪🇸 Español</option>
+     <option value="pt">Português</option>
+     <option value="de">Deutsch</option>
+     <option value="it">Italiano</option>
+     <option value="ar">العربية</option>
+     <option value="zh">中文</option>
+     <option value="ja">日本語</option>
+     <option value="ru">Русский</option>
+    </select>
+   </div>
+
+   <button class="swap" onclick="swap()">⇄</button>
+
+   <div>
+    <label>Langue cible</label>
+    <select id="to">
+     <option value="fr">🇫🇷 Français</option>
+     <option value="ht">🇭🇹 Kreyòl</option>
+     <option value="en">🇺🇸 English</option>
+     <option value="es">🇪🇸 Español</option>
+     <option value="pt">Português</option>
+     <option value="de">Deutsch</option>
+     <option value="it">Italiano</option>
+     <option value="ar">العربية</option>
+     <option value="zh">中文</option>
+     <option value="ja">日本語</option>
+     <option value="ru">Русский</option>
+    </select>
+   </div>
+  </div>
+ </div>
+
+ <div class="card">
+  <label>✍️ Votre texte</label>
+  <textarea id="input" placeholder="Écrivez votre message ici..."></textarea>
+
+  <div class="tools">
+   <button onclick="listen()">🎤 Parler</button>
+   <button onclick="clearText()">🗑️ Effacer</button>
+  </div>
+
+  <button class="mainbtn" id="translate" onclick="translateText()">
+   ✨ Traduire maintenant
+  </button>
+
+  <p class="status" id="status">Prêt à traduire</p>
+ </div>
+
+ <div class="card">
+  <label>🌍 Résultat de traduction</label>
+  <textarea id="output" placeholder="Votre traduction apparaîtra ici..." readonly></textarea>
+
+  <div class="tools">
+   <button onclick="copyText()">📋 Copier</button>
+   <button onclick="speak()">🔊 Écouter</button>
+  </div>
+ </div>
+
+ <div class="features">
+  <div class="feature">
+   <h3>🌎 Multilingue</h3>
+   <p>Communiquez dans plusieurs langues.</p>
+  </div>
+  <div class="feature">
+   <h3>🎙️ Vocal</h3>
+   <p>Dictez et écoutez vos textes.</p>
+  </div>
+  <div class="feature">
+   <h3>⚡ Rapide</h3>
+   <p>Une interface simple et moderne.</p>
+  </div>
+ </div>
+
+</div>
+
+<footer>Poly Voice AI © 2026</footer>
+
+<script>
+async function translateText(){
+ const text=document.getElementById("input").value.trim();
+ const from=document.getElementById("from").value;
+ const to=document.getElementById("to").value;
+ const status=document.getElementById("status");
+ const output=document.getElementById("output");
+ const button=document.getElementById("translate");
+
+ if(!text){
+  status.textContent="Écrivez un texte à traduire.";
+  return;
+ }
+
+ if(from===to){
+  output.value=text;
+  status.textContent="Les langues sont identiques.";
+  return;
+ }
+
+ button.disabled=true;
+ status.textContent="⏳ Traduction en cours...";
+
+ try{
+  const url="https://api.mymemory.translated.net/get?q="
+   +encodeURIComponent(text)+"&langpair="+from+"|"+to;
+
+  const response=await fetch(url);
+  const data=await response.json();
+
+  if(data.responseStatus!==200){
+   throw new Error("Translation error");
+  }
+
+  output.value=data.responseData.translatedText;
+  status.textContent="✅ Traduction terminée !";
+ }catch(error){
+  status.textContent="Erreur. Vérifiez votre connexion Internet.";
+ }
+
+ button.disabled=false;
+}
+
+function swap(){
+ const from=document.getElementById("from");
+ const to=document.getElementById("to");
+ const old=from.value;
+ from.value=to.value;
+ to.value=old;
+
+ const input=document.getElementById("input");
+ const output=document.getElementById("output");
+ const oldText=input.value;
+ input.value=output.value;
+ output.value=oldText;
+}
+
+function clearText(){
+ document.getElementById("input").value="";
+ document.getElementById("output").value="";
+ document.getElementById("status").textContent="Texte effacé.";
+}
+
+function speak(){
+ const text=document.getElementById("output").value;
+ const lang=document.getElementById("to").value;
+
+ if(!text){
+  document.getElementById("status").textContent="Aucun texte à lire.";
+  return;
+ }
+
+ if(!window.speechSynthesis){
+  document.getElementById("status").textContent="Voix non disponible.";
+  return;
+ }
+
+ speechSynthesis.cancel();
+ const voice=new SpeechSynthesisUtterance(text);
+ voice.lang=lang;
+ voice.rate=0.9;
+ speechSynthesis.speak(voice);
+}
+
+function copyText(){
+ const text=document.getElementById("output").value;
+
+ if(!text){
+  document.getElementById("status").textContent="Aucun texte à copier.";
+  return;
+ }
+
+ if(navigator.clipboard){
+  navigator.clipboard.writeText(text)
+   .then(()=>document.getElementById("status").textContent="Texte copié !");
+ }else{
+  document.getElementById("output").select();
+  document.execCommand("copy");
+ }
+}
+
+function listen(){
+ const Recognition=window.SpeechRecognition||window.webkitSpeechRecognition;
+
+ if(!Recognition){
+  document.getElementById("status").textContent=
+   "Reconnaissance vocale non supportée.";
+  return;
+ }
+
+ const recognition=new Recognition();
+ recognition.lang=document.getElementById("from").value;
+
+ recognition.onstart=()=>{
+  document.getElementById("status").textContent="🎤 Parlez maintenant...";
+ };
+
+ recognition.onresult=(event)=>{
+  document.getElementById("input").value=
+   event.results[0][0].transcript;
+  document.getElementById("status").textContent="Voix convertie en texte.";
+ };
+
+ recognition.onerror=()=>{
+  document.getElementById("status").textContent=
+   "Erreur du microphone.";
+ };
+
+ recognition.start();
+}
+</script>
+
+</body>
+  </html>
+  
